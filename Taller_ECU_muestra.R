@@ -1,3 +1,4 @@
+# Documentar
 
 library(aqp)
 
@@ -11,7 +12,7 @@ library(elevatr)
 
 library(mapview)
 
-bd_taller_unida <- read.csv("Downloads/bd_taller_unida.csv")
+bd_taller_unida <- read.csv("Downloads/bd_taller_unida.csv") #https://drive.google.com/file/d/1xNm3CgaAUhO9v47BaZaJfZurMudap3cE/view?usp=sharing
 
 cos <- bd_taller_unida[c("ID_PER", "CORX.x", "CORY.x", "LIMSUP.x" , "LIMINF.x", "CO.x")]
 
@@ -108,4 +109,6 @@ m <- train.spLearner(train["cossp_0100"], covariates=covar, lambda = 1)
 summary(m@spModel$learner.model$super.model$learner.model)
 
 mp <- predict(m)
+
+
 
