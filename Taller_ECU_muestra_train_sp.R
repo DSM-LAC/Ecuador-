@@ -16,9 +16,13 @@ bd_taller_unida <- read.csv("Downloads/bd_taller_unida.csv") #https://drive.goog
 
 cos <- bd_taller_unida[c("ID_PER", "CORX.x", "CORY.x", "LIMSUP.x" , "LIMINF.x", "CO.x")]
 
+
+
 cos <- na.omit(cos)
 
 cos$IDPROF <- paste0("IDPROF_", cos$CORX.x, "_", cos$CORY.x)
+
+cos$ID_DEPTH <- paste0("IDPROF_", cos$LIMSUP.x, "_", cos$LIMINF.x)
 
 coordinates(cos) <- ~ CORX.x  +  CORY.x
 
@@ -47,6 +51,8 @@ site(sp4) <- ~ CORX.x + CORY.x
 coordinates(sp4) <- ~ CORX.x + CORY.x
 
 train <- data.frame()
+
+#ver error en as.data.frame(cos[cos$ID_PER == '1092',])
 
 for (i in 1:length(sp4)){
 
