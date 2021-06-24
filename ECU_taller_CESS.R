@@ -138,5 +138,9 @@ summary(m@spModel$learner.model$super.model$learner.model)
 
 mp <- predict(m)
 
+prediction <- expm1(stack(mp$pred))
+
+writeRaster(prediction, file='band1RESPONSE_band2ERROR_band3LOWER, band4UPPER.tif')
+
 
 
