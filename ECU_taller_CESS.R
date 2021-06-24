@@ -2,6 +2,7 @@
 
 library(aqp)
 
+
 library(GSIF)
 
 library(raster)
@@ -132,7 +133,7 @@ train@data <- cbind(train@data, over(train, covar))
 
 train$log_ces0100 <- log1p(train$cessp_0100)
 
-m <- train.spLearner(train["log_ces0100"], covariates=covar, lambda = 1)
+m <- train.spLearner(train["log_ces0100"], covariates=covar, oblique.coords=FALSE)
 
 summary(m@spModel$learner.model$super.model$learner.model)
 
