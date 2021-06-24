@@ -1,8 +1,7 @@
 # Documentar
 
+#cargar librerias
 library(aqp)
-
-library(rgdal)
 
 library(GSIF)
 
@@ -11,6 +10,29 @@ library(raster)
 library(elevatr)
 
 library(mapview)
+
+library(landmap)
+
+library(rgdal)
+
+library(geoR)
+
+library(plotKML)
+
+library(raster)
+
+library(glmnet)
+
+library(xgboost)
+
+library(kernlab)
+
+library(deepnet)
+
+library(forestError)
+
+library(mlr)
+
 
 bd_taller_unida <- read.csv("Downloads/bd_taller_unida.csv") #https://drive.google.com/file/d/1xNm3CgaAUhO9v47BaZaJfZurMudap3cE/view?usp=sharing
 
@@ -55,17 +77,31 @@ train <- data.frame()
 #ver error en as.data.frame(cos[cos$ID_PER == '1092',])
 
 for (i in 1:length(sp4)){
-
-try(cos_sp <- mpspline(sp4[i], 'CO.x', d = t(c(0,30))))
-
+  try(cos_sp <- mpspline(sp4[i], 'CO.x', d = t(c(0,100))))
   cos_sp <- data.frame(
-  x = sp4[i]@sp@coords[,1],
-  y = sp4[i]@sp@coords[,2],
-  cossp_0100 = cos_sp$var.std[,1])
-
+    x = sp4[i]@sp@coords[,1],
+    y = sp4[i]@sp@coords[,2],
+    cossp_0100 = cos_sp$var.std[,1])
   train <- rbind(train, cos_sp)
-
   }
+
+for (i in 3:length(sp4)){
+  try(cos_sp <- mpspline(sp4[i], 'CO.x', d = t(c(0,100))))
+  cos_sp <- data.frame(
+    x = sp4[i]@sp@coords[,1],
+    y = sp4[i]@sp@coords[,2],
+    cossp_0100 = cos_sp$var.std[,1])
+  train <- rbind(train, cos_sp)
+}
+
+for (i in 47:length(sp4)){
+  try(cos_sp <- mpspline(sp4[i], 'CO.x', d = t(c(0,100))))
+  cos_sp <- data.frame(
+    x = sp4[i]@sp@coords[,1],
+    y = sp4[i]@sp@coords[,2],
+    cossp_0100 = cos_sp$var.std[,1])
+  train <- rbind(train, cos_sp)
+}
 
 coordinates(train) <- ~ x+y
 
@@ -108,9 +144,9 @@ mapview(train['cossp_0100'])
 
 train@data <- cbind(train@data, over(train, covar))
 
-#train$cossp_0100 <- log1p(train$cossp_0100)
+train$log_cos0100 <- log1p(train$cossp_0100)
 
-m <- train.spLearner(train["cossp_0100"], covariates=covar, lambda = 1)
+m <- train.spLearner(train["log_cos0100"], covariates=covar, lambda = 1)
 
 summary(m@spModel$learner.model$super.model$learner.model)
 
